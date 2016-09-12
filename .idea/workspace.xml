@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="edda7505-6018-4ac5-8953-345198f4cdac" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Proyecto Paradigmas.iml" />
-    </list>
+    <list default="true" id="edda7505-6018-4ac5-8953-345198f4cdac" name="Default" comment="" />
     <ignored path="Proyecto Paradigmas.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -145,12 +143,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1473643128187</updated>
-      <workItem from="1473643130587" duration="13000" />
+      <workItem from="1473643130587" duration="368000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13000" />
+    <option name="totallyTimeSpent" value="368000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="2560" height="1415" extended-state="0" />

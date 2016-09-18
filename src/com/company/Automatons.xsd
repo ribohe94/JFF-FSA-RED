@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema>
+<!-- *************************************************************************** -->
+<!-- *************************************************************************** -->
+<xs:element name="structure" minOccurs="1" maxOccurs="1">
+	<xs:complexType>
+		<xs:sequence>
+			<!-- *************************************************************************** -->
+			<xs:element name="type" minOccurs="1" maxOccurs="1">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<!-- *************************************************************************** -->
+			<xs:element name="automaton" minOccurs="1" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						
+						<!-- *************************************************************************** -->
+						<xs:element name="state" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+							
+								<xs:sequence>
+									<xs:element name="x" type="xs:decimal"/>
+									<xs:element name="y" type="xs:decimal"/>
+									<xs:element name="initial" minOccurs="0" maxOccurs="1" fixed=""/>
+									<xs:element name "final" minOccurs="0" maxOccurs="1" fixed=""/>
+								</xs:sequence>
+								
+								<xs:sequence>
+									<xs:attribute name="id" type="xs:integer"/>
+									<xs:attribute name="name" type="xs:string"/>
+								</xs:sequence>	
+								
+							</xs:complexType>
+						</xs:element>
+						<!-- *************************************************************************** -->
+						
+						<!-- *************************************************************************** -->
+						<xs:element name="transition" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+								
+								<xs:element name="from" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+								<xs:element name="to" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+								<xs:element name="read" type="xs:string" minOccurs="1" maxOccurs="1" default=""/>
+						
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<!-- *************************************************************************** -->
+						
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- *************************************************************************** -->
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+<!-- *************************************************************************** -->
+<!-- *************************************************************************** -->
+</xs:schema>

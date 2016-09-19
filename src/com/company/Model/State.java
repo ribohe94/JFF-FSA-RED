@@ -1,4 +1,4 @@
-package com.company;
+package com.company.Model;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,6 @@ public class State {
     private float x;
     private float y;
     private boolean final_state;
-    private ArrayList<Transition> transitions;
 
     public int getId() {
         return id;
@@ -33,9 +32,6 @@ public class State {
         return final_state;
     }
 
-    public ArrayList<Transition> getTransitions() {
-        return transitions;
-    }
     public void setId(int id) {
         this.id = id;
     }
@@ -56,16 +52,11 @@ public class State {
         this.final_state = final_state;
     }
 
-    public void setTransitions(ArrayList<Transition> transitions) {
-        this.transitions = transitions;
-    }
-
-    public State(int id, String name, float x, float y, boolean final_state, ArrayList<Transition> transitions) {
+    public State(int id, String name, float x, float y, boolean final_state) {
         this.setId(id);
         this.setName(name);
         this.setX(x);
         this.setY(y);
         this.setFinal_state(final_state);
-        this.setTransitions(transitions);
     }
 }

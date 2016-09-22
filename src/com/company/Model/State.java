@@ -1,7 +1,5 @@
 package com.company.Model;
 
-import java.util.ArrayList;
-
 /**
  * Created by Edwin on 17/09/2016.
  */

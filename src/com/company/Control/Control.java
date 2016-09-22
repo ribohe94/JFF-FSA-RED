@@ -25,6 +25,7 @@ public class Control {
         transitions = new ArrayList<>();
         read = new Read();
         write = new Write();
+        IDInitial = "0";
     }
 
     public ArrayList<State> makeStateList(String path) {
@@ -42,8 +43,12 @@ public class Control {
                 float posX = Float.valueOf(element.getElementsByTagName("x").item(0).getTextContent());
                 float posY = Float.valueOf(element.getElementsByTagName("y").item(0).getTextContent());
                 boolean isFinal = false;
-                if(element.getElementsByTagName("final").item(0) != null)
+                if(element.getElementsByTagName("final").item(0) != null) {
                     isFinal = true;
+                }
+                if(element.getElementsByTagName("initial").item(0) != null) {
+                    IDInitial = String.valueOf(i);
+                }
                 states.add(new State(Integer.valueOf(id), name, posX, posY, isFinal));
             }
         } catch (IOException e) {
@@ -87,7 +92,7 @@ public class Control {
 
     public void writeFSA(String path){
         try {
-            Document doc = write.makeDocument(states, transitions);
+            Document doc = write.makeDocument(states, transitions,IDInitial);
             write.writeXML(doc, path);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -102,4 +107,5 @@ public class Control {
     private ArrayList<Transition> transitions;
     private Read read;
     private Write write;
+    private String IDInitial;
 }

@@ -9,6 +9,6 @@ public class Main {
         Control control = new Control();
         control.makeStateList("FSA3.jff");
         control.makeTransitionList("FSA3.jff");
-        control.writeFSA("output.xml");
+        control.reduce();
     }
 }

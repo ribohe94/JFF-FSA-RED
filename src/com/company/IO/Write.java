@@ -103,6 +103,10 @@ public class Write {
 
             Element value = doc.createElement("value");
             value.appendChild(doc.createTextNode(String.valueOf(transition.getValue())));
+
+            transitionNode.appendChild(from);
+            transitionNode.appendChild(to);
+            transitionNode.appendChild(value);
         }
 
         doc.normalizeDocument();

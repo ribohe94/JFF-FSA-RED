@@ -14,6 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by ribohe94 on 18/09/16.
@@ -42,9 +44,12 @@ public class Control {
                 float posX = Float.valueOf(element.getElementsByTagName("x").item(0).getTextContent());
                 float posY = Float.valueOf(element.getElementsByTagName("y").item(0).getTextContent());
                 boolean isFinal = false;
-                if(element.getElementsByTagName("final").item(0) != null)
+                boolean initial = false;
+                if (element.getElementsByTagName("final").item(0) != null)
                     isFinal = true;
-                states.add(new State(Integer.valueOf(id), name, posX, posY, isFinal));
+                if (element.getElementsByTagName("initial").item(0) != null)
+                    initial = true;
+                states.add(new State(Integer.valueOf(id), name, posX, posY, isFinal, initial));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,7 +90,7 @@ public class Control {
 
     }
 
-    public void writeFSA(String path){
+    public void writeFSA(String path) {
         try {
             Document doc = write.makeDocument(states, transitions);
             write.writeXML(doc, path);
@@ -96,7 +101,45 @@ public class Control {
         }
     }
 
+    public ArrayList<Transition> getFromTransitions(State inState) {
+        ArrayList<Transition> fromTransitions = new ArrayList<>();
 
+        for(Transition transition : transitions) {
+            if(transition.getFrom() == inState.getId()) {
+                fromTransitions.add(transition);
+            }
+        }
+        return fromTransitions;
+    }
+
+    public HashSet<State> getLambdaStates(State inState) {
+        HashSet<State> lambdaStates = new HashSet<>();
+        for (Transition transition : transitions) {
+            if(transition.getFrom() == inState.getId() && transition.getValue().equals("")) {
+                lambdaStates.add(states.get(transition.getTo()));
+            }
+        }
+        return lambdaStates;
+    }
+
+    public HashSet<State> getRecursiveLockStates(State inState) {
+        HashSet<State> recursiveStates = new HashSet<>();
+        recursiveStates.add(inState);
+        for(State state : recursiveStates) {
+            recursiveStates.addAll(getLambdaStates(state));
+        }
+        return recursiveStates;
+    }
+
+    public void reduce() {
+        State inState = null;
+        for (State state : states) {
+            if(state.isInitial()) {
+                inState = state;
+            }
+        }
+        
+    }
 
     private ArrayList<State> states;
     private ArrayList<Transition> transitions;

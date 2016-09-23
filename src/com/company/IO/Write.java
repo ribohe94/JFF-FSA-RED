@@ -42,7 +42,7 @@ public class Write {
         transformer.transform(source, result);
     }
 
-    public Document makeDocument(ArrayList<State> states, ArrayList<Transition> transitions) throws ParserConfigurationException {
+    public Document makeDocument(ArrayList<State> states, ArrayList<Transition> transitions, String IDInitial) throws ParserConfigurationException {
         //Inicializamos el documento de salida
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -83,6 +83,11 @@ public class Write {
             stateNode.appendChild(posX);
             stateNode.appendChild(posY);
 
+            if(IDInitial.equals((String.valueOf(state.getId())))){
+                Element initial = doc.createElement("initial");
+                stateNode.appendChild(initial);
+            }
+
             if (state.isFinal_state()) {
                 Element nodeFinal = doc.createElement("final");
                 stateNode.appendChild(nodeFinal);
@@ -101,7 +106,7 @@ public class Write {
             Element to = doc.createElement("to");
             to.appendChild(doc.createTextNode(String.valueOf(transition.getTo())));
 
-            Element value = doc.createElement("value");
+            Element value = doc.createElement("read");
             value.appendChild(doc.createTextNode(String.valueOf(transition.getValue())));
 
             transitionNode.appendChild(from);
@@ -112,6 +117,5 @@ public class Write {
         doc.normalizeDocument();
         return doc;
     }
-
 
 }

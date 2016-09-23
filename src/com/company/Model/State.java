@@ -1,7 +1,5 @@
 package com.company.Model;
 
-import java.util.ArrayList;
-
 /**
  * Created by Edwin on 17/09/2016.
  */
@@ -13,13 +11,12 @@ public class State {
     private boolean final_state;
     private boolean initial;
 
-    public State(int id, String name, float x, float y, boolean final_state, boolean initial) {
+    public State(int id, String name, float x, float y, boolean final_state) {
         this.id = id;
         this.name = name;
         this.x = x;
         this.y = y;
         this.final_state = final_state;
-        this.initial = initial;
     }
 
     public int getId() {
@@ -60,13 +57,5 @@ public class State {
 
     public void setFinal_state(boolean final_state) {
         this.final_state = final_state;
-    }
-
-    public boolean isInitial() {
-        return initial;
-    }
-
-    public void setInitial(boolean initial) {
-        this.initial = initial;
     }
 }

@@ -2,6 +2,7 @@ package com.company.Control;
 
 import com.company.IO.Read;
 import com.company.IO.Write;
+import com.company.IO.XMLValidator;
 import com.company.Model.State;
 import com.company.Model.Transition;
 import org.w3c.dom.Document;
@@ -16,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static javax.swing.text.html.HTML.Tag.HEAD;
+
 /**
  * Created by ribohe94 on 18/09/16.
  */
@@ -27,6 +30,7 @@ public class Control {
         read = new Read();
         write = new Write();
         FIFO = new HashSet<>();
+        XMLValidators = new XMLValidator();
     }
 
     public ArrayList<State> makeStateList(String path) {
@@ -44,12 +48,11 @@ public class Control {
                 float posX = Float.valueOf(element.getElementsByTagName("x").item(0).getTextContent());
                 float posY = Float.valueOf(element.getElementsByTagName("y").item(0).getTextContent());
                 boolean isFinal = false;
-                boolean initial = false;
                 if (element.getElementsByTagName("final").item(0) != null)
                     isFinal = true;
                 if (element.getElementsByTagName("initial").item(0) != null)
-                    initial = true;
-                states.add(new State(Integer.valueOf(id), name, posX, posY, isFinal, initial));
+                    IDInitial = id;
+                states.add(new State(Integer.valueOf(id), name, posX, posY, isFinal));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,7 +95,7 @@ public class Control {
 
     public void writeFSA(String path) {
         try {
-            Document doc = write.makeDocument(states, transitions);
+            Document doc = write.makeDocument(states, transitions,IDInitial);
             write.writeXML(doc, path);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -148,13 +151,22 @@ public class Control {
     public void reduce() {
         State inState = null;
         for (State state : states) {
-            if (state.isInitial()) {
+            if (state.getId() == Integer.valueOf(IDInitial)) {
                 inState = state;
             }
         }
         HashSet<State> recursiveStates = new HashSet<>();
         recursiveStates = getRecursiveLockStates(inState);
+    }
 
+    public void ValidateXMLFiles(String XMLPath){
+        boolean val = XMLValidators.validationXSD(XSDPath,XMLPath);
+        if(val){
+            System.out.println(XMLPath+" XSD -> O.");
+        }
+        else{
+            System.out.println(XMLPath+" XSD -> X.");
+        }
     }
 
     private ArrayList<State> states;
@@ -162,4 +174,7 @@ public class Control {
     private HashSet<HashSet<State>> FIFO;
     private Read read;
     private Write write;
+    private String IDInitial;
+    private XMLValidator XMLValidators;
+    private static String XSDPath = "src/com/company/Model/Automatons.xsd";
 }

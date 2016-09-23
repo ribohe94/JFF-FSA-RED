@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema">
+<!-- *************************************************************************** -->
+<!-- *************************************************************************** -->
+	<xs:element name="structure">
+		<xs:complexType>
+			<xs:sequence>
+				<!-- *************************************************************************** -->
+				<xs:element name="type">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string"/>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<!-- *************************************************************************** -->
+				<xs:element name="automaton">
+					<xs:complexType>
+						<xs:sequence>
+
+							<!-- *************************************************************************** -->
+							<xs:element name="state" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+
+									<xs:sequence>
+										<xs:element name="x" type="xs:decimal"/>
+										<xs:element name="y" type="xs:decimal"/>
+										<xs:element name="initial" minOccurs="0" maxOccurs="1" fixed=""/>
+										<xs:element name="final" minOccurs="0" maxOccurs="1" fixed=""/>
+									</xs:sequence>
+										<xs:attribute name="id" type="xs:integer"/>
+										<xs:attribute name="name" type="xs:string"/>
+								</xs:complexType>
+							</xs:element>
+							<!-- *************************************************************************** -->
+
+							<!-- *************************************************************************** -->
+							<xs:element name="transition" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+
+									<xs:element name="from" type="xs:integer"/>
+									<xs:element name="to" type="xs:integer"/>
+									<xs:element name="read" type="xs:string" default=""/>
+
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<!-- *************************************************************************** -->
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<!-- *************************************************************************** -->
+		</xs:sequence>
+	  </xs:complexType>
+	</xs:element>
+<!-- *************************************************************************** -->
+<!-- *************************************************************************** -->
+</xs:schema>

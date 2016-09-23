@@ -106,7 +106,7 @@ public class Write {
             Element to = doc.createElement("to");
             to.appendChild(doc.createTextNode(String.valueOf(transition.getTo())));
 
-            Element value = doc.createElement("value");
+            Element value = doc.createElement("read");
             value.appendChild(doc.createTextNode(String.valueOf(transition.getValue())));
 
             transitionNode.appendChild(from);

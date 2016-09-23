@@ -2,6 +2,7 @@ package com.company.Control;
 
 import com.company.IO.Read;
 import com.company.IO.Write;
+import com.company.IO.XMLValidator;
 import com.company.Model.State;
 import com.company.Model.Transition;
 import org.w3c.dom.Document;
@@ -26,6 +27,7 @@ public class Control {
         read = new Read();
         write = new Write();
         IDInitial = "0";
+        XMLValidators = new XMLValidator();
     }
 
     public ArrayList<State> makeStateList(String path) {
@@ -101,11 +103,21 @@ public class Control {
         }
     }
 
-
+    public void ValidateXMLFiles(String XMLPath){
+        boolean val = XMLValidators.validationXSD(XSDPath,XMLPath);
+        if(val){
+            System.out.println(XMLPath+" XSD -> O.");
+        }
+        else{
+            System.out.println(XMLPath+" XSD -> X.");
+        }
+    }
 
     private ArrayList<State> states;
     private ArrayList<Transition> transitions;
     private Read read;
     private Write write;
     private String IDInitial;
+    private XMLValidator XMLValidators;
+    private static String XSDPath = "src/com/company/Model/Automatons.xsd";
 }

@@ -26,6 +26,7 @@ public class Control {
         transitions = new ArrayList<>();
         read = new Read();
         write = new Write();
+        FIFO = new HashSet<>();
     }
 
     public ArrayList<State> makeStateList(String path) {
@@ -153,7 +154,6 @@ public class Control {
         }
         HashSet<State> recursiveStates = new HashSet<>();
         recursiveStates = getRecursiveLockStates(inState);
-
 
     }
 

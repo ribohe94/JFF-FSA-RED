@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 /**
  * Created by ribohe94 on 17/09/16.
+ *
+ * Clase dedicada a "escribir" los archivos JFF
+ *
  */
 public class Write {
 
@@ -28,6 +31,8 @@ public class Write {
     }
 
     /**
+     * Escribe el docuemnto JFF
+     *
      * @param doc  - Documento XML
      * @param path - Output path
      * @throws TransformerException
@@ -42,6 +47,14 @@ public class Write {
         transformer.transform(source, result);
     }
 
+    /**
+     * Crea un documento XML basandose en los argumentos que recibe
+     * @param states - Lista de estados
+     * @param transitions - Lista de transiciones
+     * @param IDInitial - Nodo inicial
+     * @return
+     * @throws ParserConfigurationException
+     */
     public Document makeDocument(ArrayList<State> states, ArrayList<Transition> transitions, String IDInitial) throws ParserConfigurationException {
         //Inicializamos el documento de salida
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

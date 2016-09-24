@@ -1,3 +1,7 @@
+# Ignore output file
+output.xml
+output.jff
+
 *.class
 
 # Mobile Tools for Java (J2ME)

@@ -18,6 +18,7 @@ public class Main {
         Control control = new Control();
         control.init(args);
 
+		//Ejemplo de uso.
         //Consola: java -jar Proyecto\ Paradigmas.jar "/home/ribohe94/IdeaProjects/Proyecto Paradigmas/out/artifacts/Proyecto_Paradigmas_jar/test/" "JFF/"
 
     }

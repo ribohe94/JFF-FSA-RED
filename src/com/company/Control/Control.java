@@ -14,10 +14,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-
-import static javax.swing.text.html.HTML.Tag.HEAD;
+import java.util.*;
 
 /**
  * Created by ribohe94 on 18/09/16.
@@ -27,9 +24,10 @@ public class Control {
     public Control() {
         states = new ArrayList<>();
         transitions = new ArrayList<>();
+        alphabet = new HashSet<>();
         read = new Read();
         write = new Write();
-        FIFO = new HashSet<>();
+//        FIFO = new HashSet<>();
         XMLValidators = new XMLValidator();
     }
 
@@ -93,9 +91,33 @@ public class Control {
 
     }
 
+    public HashSet<String> makeAlphabet(String path) {
+        Document doc = null;
+        //Parseamos el docuemnto XML
+        try {
+            doc = read.getXMLFile(path);
+            NodeList nlist = doc.getElementsByTagName("transition");
+            Node node;
+            for (int i = 0; i < nlist.getLength(); i++) {
+                node = nlist.item(i);
+                Element element = (Element) node;
+                String value = element.getElementsByTagName("read").item(0).getTextContent();
+                if (!"".equals(value))
+                    alphabet.add(value);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        return alphabet;
+    }
+
     public void writeFSA(String path) {
         try {
-            Document doc = write.makeDocument(states, transitions,IDInitial);
+            Document doc = write.makeDocument(states, transitions, IDInitial);
             write.writeXML(doc, path);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -114,6 +136,13 @@ public class Control {
         return fromTransitions;
     }
 
+    /**
+     * Regresa las posibles transiciones vacías desde los estados otorgados. Solo regresa un nivel, osea, solo lee a
+     * un nodo de distancia.
+     *
+     * @param inStates
+     * @return
+     */
     public HashSet<State> getTransition(HashSet<State> inStates) {
         HashSet<State> lambdaStates = new HashSet<>();
         for (State state : inStates) {
@@ -126,6 +155,13 @@ public class Control {
         return lambdaStates;
     }
 
+    /**
+     * Regresa las posibles transiciones con el valor otorgado
+     *
+     * @param inStates
+     * @param value
+     * @return
+     */
     public HashSet<State> getTransition(HashSet<State> inStates, String value) {
         HashSet<State> transitionStates = new HashSet<>();
         for (State state : inStates) {
@@ -138,40 +174,96 @@ public class Control {
         return transitionStates;
     }
 
-    public HashSet<State> getRecursiveLockStates(State inState) {
+    /**
+     * Regresa la cantidad completa de transiciones vacías posibles.
+     *
+     * @param inStates
+     * @return
+     */
+    public HashSet<State> getRecursiveLockStates(HashSet<State> inStates) {
         HashSet<State> recursiveStates = new HashSet<>();
-        recursiveStates.add(inState);
-        for (int i = 0; i < recursiveStates.size(); i++) {
-            recursiveStates.addAll(getTransition(recursiveStates));
+        for (State state : inStates) {
+            recursiveStates.add(state);
+            for (int i = 0; i < recursiveStates.size(); i++) {
+                recursiveStates.addAll(getTransition(recursiveStates));
+            }
         }
         return recursiveStates;
     }
 
-
+    /**
+     *
+     */
     public void reduce() {
+        HashSet<State> outStates = new HashSet<>();
+        HashSet<Transition> outTransitions = new HashSet<>();
+        Map<HashSet<State>, State> mappedStates = new HashMap<>();
+
         State inState = null;
         for (State state : states) {
             if (state.getId() == Integer.valueOf(IDInitial)) {
                 inState = state;
             }
         }
-        HashSet<State> recursiveStates = new HashSet<>();
-        recursiveStates = getRecursiveLockStates(inState);
+
+        outStates.add(inState);
+        HashSet<State> init = new HashSet<>();
+        init.add(inState);
+
+        mappedStates.put(getRecursiveLockStates(init), new State(0, "q0", 0, 0, inState.isFinal_state()));
+        ArrayList<HashSet<State>> loopList = new ArrayList(mappedStates.keySet());
+        int stateName = 0;
+        for (int i = 0; i < loopList.size(); i++) {
+            for (String value : alphabet) {
+                if (!mappedStates.containsKey(getRecursiveLockStates(getTransition(loopList.get(i), value)))) {
+                    HashSet<State> key = getRecursiveLockStates(getTransition(loopList.get(i), value));
+
+                    //Verificamos si hay un estado final en la cerradura
+                    boolean isFinal = false;
+                    for(State state : key) {
+                        if(state.isFinal_state()) {
+                            isFinal = true;
+                        }
+                    }
+
+                    State newState = new State(++stateName, "q" + String.valueOf(stateName), 0, 0, isFinal);
+                    mappedStates.put(key, newState);
+                    loopList.add(getRecursiveLockStates(getTransition(loopList.get(i), value)));
+                    outStates.add(newState);
+                    outTransitions.add(new Transition(mappedStates.get(loopList.get(i)).getId(), newState.getId(), value));
+                } else {
+                    HashSet<State> key = getRecursiveLockStates(getTransition(loopList.get(i), value));
+                    outTransitions.add(new Transition(mappedStates.get(loopList.get(i)).getId(), mappedStates.get(key).getId(), value));
+
+                }
+            }
+        }
+        ArrayList<State> outStatesList = new ArrayList<>(outStates);
+        ArrayList<Transition> outTransitionsList = new ArrayList<>(outTransitions);
+        try {
+            Document doc = write.makeDocument(outStatesList, outTransitionsList, String.valueOf(inState.getId()));
+            write.writeXML(doc, "output.jff");
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public void ValidateXMLFiles(String XMLPath){
-        boolean val = XMLValidators.validationXSD(XSDPath,XMLPath);
-        if(val){
-            System.out.println(XMLPath+" XSD -> O.");
-        }
-        else{
-            System.out.println(XMLPath+" XSD -> X.");
+    public void ValidateXMLFiles(String XMLPath) {
+        boolean val = XMLValidators.validationXSD(XSDPath, XMLPath);
+        if (val) {
+            System.out.println(XMLPath + " XSD -> O.");
+        } else {
+            System.out.println(XMLPath + " XSD -> X.");
         }
     }
 
     private ArrayList<State> states;
     private ArrayList<Transition> transitions;
-    private HashSet<HashSet<State>> FIFO;
+    private HashSet<String> alphabet;
+    private ArrayList<HashSet<State>> FIFO;
     private Read read;
     private Write write;
     private String IDInitial;

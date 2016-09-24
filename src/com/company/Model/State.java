@@ -9,7 +9,6 @@ public class State {
     private float x;
     private float y;
     private boolean final_state;
-    private boolean initial;
 
     public State(int id, String name, float x, float y, boolean final_state) {
         this.id = id;

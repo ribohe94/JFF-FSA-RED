@@ -10,9 +10,8 @@ import java.util.stream.Stream;
 
 /**
  * Created by ribohe94 on 23/09/16.
- *
+ * <p>
  * Enum de estados para manejar posibles situaciones con respecto a los argumentos de entrada.
- *
  */
 public enum States implements State {
     Init {
@@ -35,10 +34,12 @@ public enum States implements State {
                 paths.forEach(filePath -> {
                     if (Files.isRegularFile(filePath)) {
                         System.out.println(filePath);
-                        control.makeStateList(filePath.toString());
-                        control.makeTransitionList(filePath.toString());
-                        control.makeAlphabet(filePath.toString());
-                        control.reduce(input[1] + "output - " + filePath.getFileName());
+                        if (control.ValidateXMLFiles(filePath.toString())) {
+                            control.makeStateList(filePath.toString());
+                            control.makeTransitionList(filePath.toString());
+                            control.makeAlphabet(filePath.toString());
+                            control.reduce(input[1] + "output - " + filePath.getFileName());
+                        }
                     }
                 });
             } catch (IOException e) {

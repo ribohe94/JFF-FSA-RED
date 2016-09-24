@@ -17,9 +17,11 @@ import org.xml.sax.SAXException;
  */
 
 public class XMLValidator {
+	//Esta clase se encarga de tomar un archivo XML dado y compararlo contra el archivo XSD existente para validar su esquema.
     public XMLValidator(){}
 
     public boolean validationXSD(String xsdFilePath, String xmlFilePath) {
+		//Recibe ambos archivos (XML y XSD) y llama el método validador. La localización del XSD es fija y está dada en la clase Control.
         boolean isValid = validateXMLSchema(xsdFilePath,xmlFilePath);
         if(isValid){
             return true;
@@ -44,5 +46,5 @@ public class XMLValidator {
         }
     }
 
-    //public void validationXMLDocument(){}
+    //public void validationXMLDocument(){} //Valida por medio del archivo DTD.
 }

@@ -258,14 +258,21 @@ public class Control {
         }
 
     }
-
-    public void ValidateXMLFiles(String XMLPath) {
-        boolean val = XMLValidators.validationXSD(XSDPath, XMLPath);
-        if (val) {
+        
+	public void ValidateXMLFiles(String XMLPath){
+		// Llama al validador e imprime el nombre del archivo junto con una O si la validación es correcta y X si no. 
+        boolean val = XMLValidators.validationXSD(XSDPath,XMLPath);
+        if(val){
             System.out.println(XMLPath + " XSD -> O.");
-        } else {
+		} else {
             System.out.println(XMLPath + " XSD -> X.");
         }
+    }
+
+	
+    private void DisperseStates(ArrayList<State> states){
+        //Recibe los estados del autómata determinista (simplificado) y reasigna coordenadas (X,Y) lejanas entre si para cada estado.
+        //Se debe llamar a este método antes de crear el archivo final.
     }
 
     private ArrayList<State> states;

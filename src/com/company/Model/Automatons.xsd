@@ -2,6 +2,7 @@
 
 <xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema">
 <!-- *************************************************************************** -->
+<!-- ****Archivo del esquema para XML de autómatas finitos creados con JFLAP**** -->
 <!-- *************************************************************************** -->
 	<xs:element name="structure">
 		<xs:complexType>

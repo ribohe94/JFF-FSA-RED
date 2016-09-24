@@ -4,6 +4,7 @@ package com.company.Model;
  * Created by Edwin on 17/09/2016.
  */
 public class Transition {
+	//Clase base para la estructura de las transiciones del autómata.
     private int from;
     private int to;
     private String value;

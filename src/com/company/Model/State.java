@@ -4,6 +4,9 @@ package com.company.Model;
  * Created by Edwin on 17/09/2016.
  */
 public class State {
+	//Clase base para la estructura de los estados del autómata.
+	//Las transiciones están dadas en otra clase. El estado inicial lo identifica la clase Control.
+	
     private int id;
     private String name;
     private float x;

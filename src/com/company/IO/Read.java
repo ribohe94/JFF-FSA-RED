@@ -11,6 +11,9 @@ import java.io.IOException;
 
 /**
  * Created by ribohe94 on 17/09/16.
+ *
+ * Clase dedicada a la lectura de archivos
+ *
  */
 public class Read {
 
@@ -19,6 +22,8 @@ public class Read {
     }
 
     /**
+     *
+     * Lee el archivo JFF y regresa un objeto Document
      *
      * @param path - XML file path
      * @return

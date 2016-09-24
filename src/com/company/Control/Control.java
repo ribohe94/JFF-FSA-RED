@@ -20,9 +20,15 @@ import java.util.*;
 
 /**
  * Created by ribohe94 on 18/09/16.
+ *
+ * Clase de control. Maneja toda la información y las demás clases para generar el automata deseado.
+ *
  */
 public class Control {
 
+    /**
+     * Contructor, inicializa las variables relevantes
+     */
     public Control() {
         states = new ArrayList<>();
         transitions = new ArrayList<>();
@@ -32,6 +38,12 @@ public class Control {
         XMLValidators = new XMLValidator();
     }
 
+    /**
+     *
+     * Metodo inicial. Pone todo en marcha y corre los argumentos.
+     *
+     * @param input - Argumento ingresado desde la consola
+     */
     public void init(String [] input) {
         com.company.UI.State s = States.Init;
         while (s != null) {
@@ -39,6 +51,13 @@ public class Control {
         }
     }
 
+    /**
+     *
+     * Regresa una lista de estados basado en el archivo .jff
+     *
+     * @param path - Direccion del archivo de entrada
+     * @return
+     */
     public ArrayList<State> makeStateList(String path) {
         Document doc = null;
         //Parseamos el docuemnto XML
@@ -72,6 +91,13 @@ public class Control {
 
     }
 
+    /**
+     *
+     * Regresa una lista de transiciones basado en el archivo .jff
+     *
+     * @param path - Direccion del archivo de entrada
+     * @return
+     */
     public ArrayList<Transition> makeTransitionList(String path) {
         Document doc = null;
         //Parseamos el docuemnto XML
@@ -99,6 +125,13 @@ public class Control {
 
     }
 
+    /**
+     *
+     * Genera lalista de caracteres utilizados en el automata
+     *
+     * @param path  - Direccion del archivo de entrada
+     * @return
+     */
     public HashSet<String> makeAlphabet(String path) {
         Document doc = null;
         //Parseamos el docuemnto XML
@@ -123,32 +156,11 @@ public class Control {
         return alphabet;
     }
 
-    public void writeFSA(String path) {
-        try {
-            Document doc = write.makeDocument(states, transitions, IDInitial);
-            write.writeXML(doc, path);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public ArrayList<Transition> getFromTransitions(State inState) {
-        ArrayList<Transition> fromTransitions = new ArrayList<>();
-        for (Transition transition : transitions) {
-            if (transition.getFrom() == inState.getId()) {
-                fromTransitions.add(transition);
-            }
-        }
-        return fromTransitions;
-    }
-
     /**
-     * Regresa las posibles transiciones vacías desde los estados otorgados. Solo regresa un nivel, osea, solo lee a
+     * Regresa las posibles transiciones vacías (Lambda) desde los estados otorgados. Solo regresa un nivel, osea, solo lee a
      * un nodo de distancia.
      *
-     * @param inStates
+     * @param inStates - Lista de estados a evaluar
      * @return
      */
     public HashSet<State> getTransition(HashSet<State> inStates) {
@@ -166,8 +178,8 @@ public class Control {
     /**
      * Regresa las posibles transiciones con el valor otorgado
      *
-     * @param inStates
-     * @param value
+     * @param inStates - Lista de estados a evaluar
+     * @param value - Valor de entrada
      * @return
      */
     public HashSet<State> getTransition(HashSet<State> inStates, String value) {
@@ -184,6 +196,7 @@ public class Control {
 
     /**
      * Regresa la cantidad completa de transiciones vacías posibles.
+     * Corre el metodo getTransition recursivamente para abarcar todos los niveles de profundidad posibles.
      *
      * @param inStates
      * @return
@@ -200,7 +213,9 @@ public class Control {
     }
 
     /**
-     *
+     * Metodo principal de reduccion. Utiliza todos los metodos previos para reducir el automata.
+     * finalmente lo imprime en formato .JFF en el directorio especificado
+     * @param path - directorio de salida
      */
     public void reduce(String path) {
         HashSet<State> outStates = new HashSet<>();

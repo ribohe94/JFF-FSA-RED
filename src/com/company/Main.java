@@ -3,18 +3,22 @@ package com.company;
 import com.company.Control.Control;
 import com.company.Model.State;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static javax.swing.text.html.HTML.Tag.HEAD;
 
 public class Main {
 
     public static void main(String[] args) {
-        //Prueba - Se puede borrar
         Control control = new Control();
-        control.makeStateList("FSA3.jff");
-        control.makeTransitionList("FSA3.jff");
-        control.makeAlphabet("FSA3.jff");
-        control.reduce();
+        control.init(args);
+
+        //Consola: java -jar Proyecto\ Paradigmas.jar "/home/ribohe94/IdeaProjects/Proyecto Paradigmas/out/artifacts/Proyecto_Paradigmas_jar/test/" "JFF/"
+
     }
 }

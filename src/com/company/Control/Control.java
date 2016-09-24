@@ -5,6 +5,8 @@ import com.company.IO.Write;
 import com.company.IO.XMLValidator;
 import com.company.Model.State;
 import com.company.Model.Transition;
+import com.company.UI.Input;
+import com.company.UI.States;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,8 +29,14 @@ public class Control {
         alphabet = new HashSet<>();
         read = new Read();
         write = new Write();
-//        FIFO = new HashSet<>();
         XMLValidators = new XMLValidator();
+    }
+
+    public void init(String [] input) {
+        com.company.UI.State s = States.Init;
+        while (s != null) {
+            s = s.next(new Input(input));
+        }
     }
 
     public ArrayList<State> makeStateList(String path) {
@@ -194,7 +202,7 @@ public class Control {
     /**
      *
      */
-    public void reduce() {
+    public void reduce(String path) {
         HashSet<State> outStates = new HashSet<>();
         HashSet<Transition> outTransitions = new HashSet<>();
         Map<HashSet<State>, State> mappedStates = new HashMap<>();
@@ -220,8 +228,8 @@ public class Control {
 
                     //Verificamos si hay un estado final en la cerradura
                     boolean isFinal = false;
-                    for(State state : key) {
-                        if(state.isFinal_state()) {
+                    for (State state : key) {
+                        if (state.isFinal_state()) {
                             isFinal = true;
                         }
                     }
@@ -242,7 +250,7 @@ public class Control {
         ArrayList<Transition> outTransitionsList = new ArrayList<>(outTransitions);
         try {
             Document doc = write.makeDocument(outStatesList, outTransitionsList, String.valueOf(inState.getId()));
-            write.writeXML(doc, "output.jff");
+            write.writeXML(doc, path);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (TransformerException e) {

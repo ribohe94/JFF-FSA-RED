@@ -274,7 +274,7 @@ public class Control {
 
     }
         
-	public void ValidateXMLFiles(String XMLPath){
+	public boolean ValidateXMLFiles(String XMLPath){
 		// Llama al validador e imprime el nombre del archivo junto con una O si la validación es correcta y X si no. 
         boolean val = XMLValidators.validationXSD(XSDPath,XMLPath);
         if(val){
@@ -282,6 +282,7 @@ public class Control {
 		} else {
             System.out.println(XMLPath + " XSD -> X.");
         }
+        return val;
     }
 
 	
